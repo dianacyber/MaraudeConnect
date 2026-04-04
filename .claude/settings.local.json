@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(php artisan:*)",
-      "Bash(php -r \"require 'vendor/autoload.php'; echo 'OK';\")"
-    ]
-  }
-}

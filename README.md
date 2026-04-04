@@ -71,3 +71,4 @@ php artisan test
 ```
 
 11 tests — validation du mot de passe (longueur, majuscule, chiffre, caractère spécial) et protection XSS.
+"# MaraudeConnect" 

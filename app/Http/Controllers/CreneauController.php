@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 
 class CreneauController extends Controller
 {
+    // Vérifie si l'utilisateur connecté est admin
+    // Retourne true/false — utilisé dans toutes les méthodes ci-dessous
+    private function estAdmin(Request $request): bool
+    {
+        $user = $request->session()->get('user'); // null si pas connecté
+        return $user && $user['role'] === 'admin';
+        // $user && ... = on vérifie d'abord que $user n'est pas null
+        // sinon $user['role'] planterait avec "array offset on null"
+    }
+
     // Affiche la liste des créneaux (GET /creneaux)
     // Accessible sans être connecté (visiteur peut consulter les créneaux)
     public function index(Request $request)
@@ -33,8 +43,7 @@ class CreneauController extends Controller
     // Affiche le formulaire de création (GET /creneaux/create)
     public function create(Request $request)
     {
-        // Seul un admin peut créer un créneau
-        if ($request->session()->get('user')['role'] !== 'admin') {
+        if (!$this->estAdmin($request)) {
             return redirect()->route('creneaux.index');
         }
 
@@ -44,7 +53,7 @@ class CreneauController extends Controller
     // Enregistre le nouveau créneau (POST /creneaux)
     public function store(Request $request)
     {
-        if ($request->session()->get('user')['role'] !== 'admin') {
+        if (!$this->estAdmin($request)) {
             return redirect()->route('creneaux.index');
         }
 
@@ -76,7 +85,7 @@ class CreneauController extends Controller
     // Affiche le formulaire de modification (GET /creneaux/{id}/edit)
     public function edit(Request $request, $id)
     {
-        if ($request->session()->get('user')['role'] !== 'admin') {
+        if (!$this->estAdmin($request)) {
             return redirect()->route('creneaux.index');
         }
 
@@ -89,7 +98,7 @@ class CreneauController extends Controller
     // Enregistre les modifications (PUT /creneaux/{id})
     public function update(Request $request, $id)
     {
-        if ($request->session()->get('user')['role'] !== 'admin') {
+        if (!$this->estAdmin($request)) {
             return redirect()->route('creneaux.index');
         }
 
@@ -121,7 +130,7 @@ class CreneauController extends Controller
     // Supprime un créneau (DELETE /creneaux/{id})
     public function destroy(Request $request, $id)
     {
-        if ($request->session()->get('user')['role'] !== 'admin') {
+        if (!$this->estAdmin($request)) {
             return redirect()->route('creneaux.index');
         }
 
@@ -134,7 +143,7 @@ class CreneauController extends Controller
     // Affiche la liste des inscrits d'un créneau (GET /creneaux/{id}/inscrits)
     public function inscrits(Request $request, $id)
     {
-        if ($request->session()->get('user')['role'] !== 'admin') {
+        if (!$this->estAdmin($request)) {
             return redirect()->route('creneaux.index');
         }
 
@@ -147,7 +156,7 @@ class CreneauController extends Controller
             ->get();
 
         return view('creneaux.inscrits', [
-            'creneau'       => $creneau,
+            'creneau'        => $creneau,
             'participations' => $participations,
         ]);
     }

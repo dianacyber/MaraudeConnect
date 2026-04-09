@@ -30,6 +30,9 @@
                        class="form-control" value="{{ old('lieu') }}" required>
             </div>
 
+
+
+
             <div class="mb-3">
                 <label for="date" class="form-label">Date</label>
                 <input type="date" id="date" name="date"
@@ -44,6 +47,8 @@
                     <option value="20:00" {{ old('heure') == '20:00' ? 'selected' : '' }}>20h00</option>
                 </select>
             </div>
+
+
 
             <div class="mb-3">
                 <label for="places_max" class="form-label">Nombre de places</label>

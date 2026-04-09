@@ -27,7 +27,7 @@ class Creneau extends Model
     {
         return $this->participations()->where('statut', 'inscrit')->count();
     }
-
+ 
     // Vérifie s'il reste des places
     public function aDesPaces()
     {

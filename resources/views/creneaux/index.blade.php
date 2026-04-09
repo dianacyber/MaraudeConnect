@@ -1,6 +1,14 @@
 @extends('layout')
 
 @section('contenu')
+@if (session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
+@if (session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>Créneaux de maraude</h1>
 

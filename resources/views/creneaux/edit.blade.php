@@ -34,13 +34,27 @@
                        class="form-control" value="{{ old('lieu', $creneau->lieu) }}" required>
             </div>
 
+
+
             <div class="mb-3">
-                <label for="date_heure" class="form-label">Date et heure</label>
-                {{-- substr : on coupe les secondes pour que datetime-local accepte la valeur --}}
-                <input type="datetime-local" id="date_heure" name="date_heure"
+                <label for="date" class="form-label">Date</label>
+                <input type="date" id="date" name="date"
                        class="form-control"
-                       value="{{ old('date_heure', substr($creneau->date_heure, 0, 16)) }}" required>
+                       value="{{ old('date', substr($creneau->date_heure, 0, 10)) }}" required>
             </div>
+
+            <div class="mb-3">
+                <label for="heure" class="form-label">Heure</label>
+                <select id="heure" name="heure" class="form-select" required>
+                    <option value="">-- Choisir une heure --</option>
+                    <option value="18:00" {{ old('heure', substr($creneau->date_heure, 11, 5)) == '18:00' ? 'selected' : '' }}>18h00</option>
+                    <option value="20:00" {{ old('heure', substr($creneau->date_heure, 11, 5)) == '20:00' ? 'selected' : '' }}>20h00</option>
+                </select>
+            </div>
+
+
+
+            
 
             <div class="mb-3">
                 <label for="places_max" class="form-label">Nombre de places</label>

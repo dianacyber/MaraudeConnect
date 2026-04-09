@@ -60,13 +60,16 @@ class CreneauController extends Controller
         $request->validate([
             'titre'      => 'required|max:150',
             'lieu'       => 'required|max:150',
-            'date_heure' => 'required|date',
+            'date'       => 'required|date',
+            'heure'      => 'required|in:18:00,20:00',
             'places_max' => 'required|integer|min:1',
         ], [
             'titre.required'      => 'Le titre est obligatoire.',
             'lieu.required'       => 'Le lieu est obligatoire.',
-            'date_heure.required' => 'La date est obligatoire.',
-            'date_heure.date'     => 'La date n\'est pas valide.',
+            'date.required'       => 'La date est obligatoire.',
+            'date.date'           => 'La date n\'est pas valide.',
+            'heure.required'      => 'L\'heure est obligatoire.',
+            'heure.in'            => 'L\'heure doit être 18h00 ou 20h00.',
             'places_max.required' => 'Le nombre de places est obligatoire.',
             'places_max.min'      => 'Il faut au moins 1 place.',
         ]);
@@ -74,7 +77,7 @@ class CreneauController extends Controller
         Creneau::create([
             'titre'       => $request->titre,
             'lieu'        => $request->lieu,
-            'date_heure'  => $request->date_heure,
+            'date_heure'  => $request->date . ' ' . $request->heure . ':00',
             'places_max'  => $request->places_max,
             'createur_id' => $request->session()->get('user')['id'],
         ]);
@@ -105,12 +108,16 @@ class CreneauController extends Controller
         $request->validate([
             'titre'      => 'required|max:150',
             'lieu'       => 'required|max:150',
-            'date_heure' => 'required|date',
+            'date'       => 'required|date',
+            'heure'      => 'required|in:18:00,20:00',
             'places_max' => 'required|integer|min:1',
         ], [
             'titre.required'      => 'Le titre est obligatoire.',
             'lieu.required'       => 'Le lieu est obligatoire.',
-            'date_heure.required' => 'La date est obligatoire.',
+            'date.required'       => 'La date est obligatoire.',
+            'date.date'           => 'La date n\'est pas valide.',
+            'heure.required'      => 'L\'heure est obligatoire.',
+            'heure.in'            => 'L\'heure doit être 18h00 ou 20h00.',
             'places_max.min'      => 'Il faut au moins 1 place.',
         ]);
 
@@ -120,7 +127,7 @@ class CreneauController extends Controller
         $creneau->update([
             'titre'      => $request->titre,
             'lieu'       => $request->lieu,
-            'date_heure' => $request->date_heure,
+            'date_heure' => $request->date . ' ' . $request->heure . ':00',
             'places_max' => $request->places_max,
         ]);
 
@@ -135,7 +142,18 @@ class CreneauController extends Controller
         }
 
         $creneau = Creneau::findOrFail($id);
-        $creneau->delete(); // Les participations liées sont supprimées par cascade (onDelete)
+
+
+
+        $nbInscrits = $creneau->nbInscrits();
+
+        if ($nbInscrits > 0) {
+            return back()->with('error', 'Impossible de supprimer ce créneau : des bénévoles y sont inscrits.');
+        }
+
+        $creneau->delete();
+
+
 
         return redirect()->route('creneaux.index')->with('success', 'Créneau supprimé.');
     }

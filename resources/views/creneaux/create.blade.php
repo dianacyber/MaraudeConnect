@@ -31,9 +31,18 @@
             </div>
 
             <div class="mb-3">
-                <label for="date_heure" class="form-label">Date et heure</label>
-                <input type="datetime-local" id="date_heure" name="date_heure"
-                       class="form-control" value="{{ old('date_heure') }}" required>
+                <label for="date" class="form-label">Date</label>
+                <input type="date" id="date" name="date"
+                       class="form-control" value="{{ old('date') }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="heure" class="form-label">Heure</label>
+                <select id="heure" name="heure" class="form-select" required>
+                    <option value="">-- Choisir une heure --</option>
+                    <option value="18:00" {{ old('heure') == '18:00' ? 'selected' : '' }}>18h00</option>
+                    <option value="20:00" {{ old('heure') == '20:00' ? 'selected' : '' }}>20h00</option>
+                </select>
             </div>
 
             <div class="mb-3">
